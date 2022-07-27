@@ -28,7 +28,7 @@ func start(server http.Server) {
 }
 func createTestServerGin() (http.Server, string) {
 	port := "11082"
-	return handlers.BuildGinServer(port), ":" + port
+	return handlers.BuildGinServer(":" + port), port
 
 }
 
