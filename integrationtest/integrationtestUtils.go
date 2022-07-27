@@ -23,7 +23,6 @@ func start(server http.Server) {
 	err := server.ListenAndServe()
 	if err != nil {
 		println(err)
-		panic(err)
 	}
 }
 func createTestServerGin() (http.Server, string) {

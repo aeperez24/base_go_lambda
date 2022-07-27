@@ -11,15 +11,18 @@ type PinHandlerImpl struct {
 }
 
 func (ph PinHandlerImpl) HandlePing(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": ph.PingService.SendPing(),
-	})
+	writeResponse(c, 200, ph.PingService.SendPing())
+
 }
 
 func (ph PinHandlerImpl) HandleHello(c *gin.Context) {
 	receivedRequest := make(map[string]string)
 	c.ShouldBindJSON(&receivedRequest)
-	c.JSON(200, gin.H{
-		"message": ph.PingService.SendHello(receivedRequest["name"]),
+	writeResponse(c, 200, ph.PingService.SendHello(receivedRequest["name"]))
+}
+
+func writeResponse(context *gin.Context, status int, data interface{}) {
+	context.JSON(status, gin.H{
+		"message": data,
 	})
 }
