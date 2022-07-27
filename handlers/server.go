@@ -9,7 +9,7 @@ import (
 )
 
 func BuildGinServer(portNumber string) http.Server {
-	return http.Server{Addr: portNumber, Handler: buildRouter()}
+	return http.Server{Addr: ":" + portNumber, Handler: buildRouter()}
 }
 
 func BuildGinLambdaServer() *ginadapter.GinLambda {

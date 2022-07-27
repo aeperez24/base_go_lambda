@@ -6,18 +6,35 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
+	"log"
+	"math/rand"
 	"net/http"
 	"time"
 )
 
-func RunTestWithIntegrationServerGin(testFunc func(port string)) {
+var appPort string
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+	appPort = "111" + fmt.Sprintf("%02d", rand.Intn(99))
+	log.Default().Printf("port is %s", appPort)
+}
+func RunTestWithIntegrationServerGin(testFunc func(integrationServerPort string)) {
 	config.LoadViperConfig("../envs/", "isolation")
 	server, port := createTestServerGin()
 	go start(server)
 	testFunc(port)
 	server.Shutdown(context.Background())
 
+}
+func getHost(port string) string {
+	return fmt.Sprintf("http://localhost:%s", port)
+}
+
+func BuildUrl(port string, path string) string {
+	return getHost(port) + path
 }
 func start(server http.Server) {
 	err := server.ListenAndServe()
@@ -26,8 +43,7 @@ func start(server http.Server) {
 	}
 }
 func createTestServerGin() (http.Server, string) {
-	port := "11082"
-	return handlers.BuildGinServer(":" + port), port
+	return handlers.BuildGinServer(appPort), appPort
 
 }
 

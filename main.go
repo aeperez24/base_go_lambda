@@ -32,7 +32,7 @@ func main() {
 
 func startLocal() {
 	config.LoadViperConfig("envs", "local")
-	server := handlers.BuildGinServer(":8089")
+	server := handlers.BuildGinServer(os.Getenv("APP_PORT"))
 	err := server.ListenAndServe()
 	if err != nil {
 		println(err)
