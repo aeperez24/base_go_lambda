@@ -22,6 +22,6 @@ func buildRouter() *gin.Engine {
 	pingService := service.NewPingService()
 	pinHander := PinHandlerImpl{PingService: pingService}
 	router.GET("/ping/", pinHander.HandlePing)
-
+	router.POST("/hello/", pinHander.HandleHello)
 	return router
 }

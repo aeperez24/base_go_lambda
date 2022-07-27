@@ -19,3 +19,15 @@ func TestPing(t *testing.T) {
 		assert.Equal(t, expected, string(bodyresp))
 	})
 }
+
+func TestHello(t *testing.T) {
+
+	RunTestWithIntegrationServerGin(func(port string) {
+		request := `{"name":"MyName"}`
+		expected := `{"message":"hello :MyName"}`
+		url := fmt.Sprintf("http://localhost:%s/hello/", port)
+
+		bodyresp, _, _ := ExecuteHttpPostCallWithStringBody(url, request, nil)
+		assert.Equal(t, expected, string(bodyresp))
+	})
+}

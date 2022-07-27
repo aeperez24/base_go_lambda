@@ -32,8 +32,26 @@ func createTestServerGin() (http.Server, string) {
 
 }
 
-func ExecuteHttpPostCall(url string, bodyInterface interface{}, headers map[string]string) ([]byte, *http.Response, error) {
+func ExecuteHttpPostCallWithInterfaceBody(url string, bodyInterface interface{}, headers map[string]string) ([]byte, *http.Response, error) {
 	body, _ := json.Marshal(bodyInterface)
+	postBuffer := bytes.NewBuffer(body)
+
+	req, _ := http.NewRequest("POST", url, postBuffer)
+	for name, value := range headers {
+		req.Header.Add(name, value)
+	}
+
+	client := &http.Client{
+		Timeout: time.Second * 10,
+	}
+
+	resp, _ := client.Do((req))
+	bodyresp, err := ioutil.ReadAll(resp.Body)
+	return bodyresp, resp, err
+}
+
+func ExecuteHttpPostCallWithStringBody(url string, bodyString string, headers map[string]string) ([]byte, *http.Response, error) {
+	body := []byte(bodyString)
 	postBuffer := bytes.NewBuffer(body)
 
 	req, _ := http.NewRequest("POST", url, postBuffer)

@@ -15,3 +15,11 @@ func (ph PinHandlerImpl) HandlePing(c *gin.Context) {
 		"message": ph.PingService.SendPing(),
 	})
 }
+
+func (ph PinHandlerImpl) HandleHello(c *gin.Context) {
+	receivedRequest := make(map[string]string)
+	c.ShouldBindJSON(&receivedRequest)
+	c.JSON(200, gin.H{
+		"message": ph.PingService.SendHello(receivedRequest["name"]),
+	})
+}
