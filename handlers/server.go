@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"aeperez24/goLambda/service"
 	"net/http"
 
 	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
@@ -8,15 +9,19 @@ import (
 )
 
 func BuildGinServer(portNumber string) http.Server {
-	return http.Server{Addr: portNumber, Handler: InitRouter()}
+	return http.Server{Addr: portNumber, Handler: buildRouter()}
 }
 
 func BuildGinLambdaServer() *ginadapter.GinLambda {
-	return ginadapter.New(InitRouter())
+	return ginadapter.New(buildRouter())
 }
 
-func InitRouter() *gin.Engine {
+func buildRouter() *gin.Engine {
+
 	router := gin.Default()
-	router.GET("/ping/", Ping)
+	pingService := service.NewPingService()
+	pinHander := PinHandlerImpl{PingService: pingService}
+	router.GET("/ping/", pinHander.HandlePing)
+
 	return router
 }

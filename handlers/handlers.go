@@ -1,14 +1,17 @@
 package handlers
 
 import (
-	"os"
+	"aeperez24/goLambda/service"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Ping(c *gin.Context) {
-	aproperty := os.Getenv("MY_PROPERTY")
+type PinHandlerImpl struct {
+	PingService service.PingService
+}
+
+func (ph PinHandlerImpl) HandlePing(c *gin.Context) {
 	c.JSON(200, gin.H{
-		"message": "pong with :" + aproperty,
+		"message": ph.PingService.SendPing(),
 	})
 }
